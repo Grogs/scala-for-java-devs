@@ -1,0 +1,243 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sky.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<style>
+			.reveal .footer {
+			position: absolute;
+			bottom: 1em;
+			left: 1em;
+			font-size: 0.7em;
+			}
+
+			/*Theme overrides*/
+			.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+			text-transform: none;
+			/* font-family: "Century Gothic", CenturyGothic, AppleGothic, sans-serif; */
+			}
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class='footer'>
+				<a href="https://grogs.github.io/scala-for-java-devs/">grogs.github.io/scala-for-java-devs</a>
+			</div>				
+			<div class="slides">
+				<section data-markdown data-separator="^~~~~" data-separator-vertical="^~" data-notes="^Note:">
+					<textarea data-template>
+### Welcome to
+## Scala for Java Developers
+~
+## Introductions
+
+- Who are you?
+- What do you do here at Expedia?
+- What are you hoping to get from this session?
+~
+First, some setup...
+
+```shell
+brew install sbt
+git clone https://github.com/Grogs/scala-for-java-devs.git
+cd scala-for-java-devs
+sbt compile
+```
+~~~~
+What is Scala?
+~
+Object Oriented meets Functional, on the JVM.
+~~~~
+## Why use Scala?
+
+Note:
+Some motivation... Why bother with Scala?
+~
+### Better Java
+
+Note:
+* When I started using Scala at work 6 years ago, it was mainly interesting as a "better Java".
+* For two reasons I think: it is more concise that Java, and the FP influences were seen as better.
+* The Java community had already been embracing immutability (but awkwardly), and Java 8 brought in the streams API on collections.
+* e.g. Guava had/has things like `List.transform` which mapped over collections
+* Scala provides a nicer syntax for that, and the language encourages you to be immutable. (Collections are immutable by default, as are "case classes")
+* But if I'm honest, Kotlin is very strong competition now IF you just want a "better Java". You get case classes, nice collection API etc.
+~
+### Performance / Scalability; yet with a concise syntax.
+
+Note:
+* This is one of the big motivations/reasons for myself and my team here at HCOM. 
+* This could be a course on its own.
+* For people from a Python/Ruby background Scala can just be a concise syntax with Java's performance.
+* There's a bunch of libraries and whole ecosystems for concurrency and asynchronous programming now in Scala.
+* Powerful Futures which I would argue are much nicer to work with than Java's CompletableFuture. Alternate implementations of Futures, and there are other things kind of like Futures but different.
+* Such as Akka Actors which implement Erlang Actor model on the JVM.
+* Stream processing libraries like akka-streams, monix, fs2. For Java you've got RxJava, and the Java 9 Flow API... In my opinion RxJava is not pleasant to work with compared with Scala alternatives.
+~
+### Datascience and Machine Learning ecosystem
+
+Note:
+* Spark is a big player here.
+* The JVM seems to dominate in the big data world. I think as data science and ML have started happening on big data, you have datascientists with Python or R background, and they appreciate a more concise yet still performant syntax over Java.
+* Also Functional programming is useful/imperative once you start doing distributed processing etc. MapReduce is basically just the concept of Monoid from Category Theory/Functional Programming.
+~
+### Static functional programming 
+
+Note:
+* Concurrent and asychronous programming are both a bit of a nightmare if you don't at least embrace immutability. 
+* But FP in Scala can be a lot more than that!
+* There are a number of library that implement or incorporate concepts from Category Theory. (Which basically just aims to make your code easier to reason about and compose.)
+* In Scala we can do a lot with types. If you adopt the functional stuff in the Scala ecosystem, you can really have a lot more guarantees about your code at compile time.
+~~~~
+### Hello world!
+
+```scala
+object Main extends App {
+    println("Hello world!")
+}
+```
+
+Note: 
+- This is how you can write Hello world in Scala.
+- It's immediately quite different from Java...
+- What's `object`, what's `App`, where's my `main` method?
+- Why not `System.out.println`
+- No semicolon
+~
+### Long version of Hello world
+```scala
+object Main {
+  def main(args: Array[String]): Unit = {
+    println("Hello world!")
+  }
+}
+```
+
+Note:
+- The `App` trait was just implementing main for you, but you can do it without App.
+- Scala doesn't have static methods, instead you can put functions/methods on an object. `object` is a singleton, so the `main` method is equivalent to a static method.
+- Methods start with `def`, the type (e.g. `Array[String]`) goes after the identifier. (instead of before)
+- Return type is optional, as Scala can infer it for you. There is always a return value, instead of void methods, you return Unit.
+- Type parameters use square brackets `[]` instead of angle brackets `<>`
+~
+Functions are expressions: No need for an explicit return statement
+
+<iframe height="400px" frameborder="0" style="width: 100%" src="https://embed.scalafiddle.io/embed?sfid=HDUTXiJ/0"></iframe>
+~
+Conditionals are expressions
+
+<iframe height="400px" frameborder="0" style="width: 100%" src="https://embed.scalafiddle.io/embed?sfid=uNllDP6/0"></iframe>
+~
+val/var to define variables
+
+<iframe height="400px" frameborder="0" style="width: 100%" src="https://embed.scalafiddle.io/embed?sfid=uNllDP6/0"></iframe>
+
+Note:
+- val is like a `final` variable in Java.
+- No need to specify the type when defining a variable
+~
+Method definition
+
+```
+<scope> def <functionName>(<parameterName: ParameterType>*): <returnType> = {
+	body 
+}
+```
+~~~~
+# Object Oriented in Scala
+~
+Everything is an object 
+
+<iframe height="400px" frameborder="0" style="width: 100%" src="https://embed.scalafiddle.io/embed?sfid=Gpjp4yj/0"></iframe>
+
+Note:
+- Even operators are methods. `+` is just a method on `Int`.
+- In this way, primitives like Int can be an object. 
+- In Java sometimes you have to think about boxing between `long` and `Long`; not so in Scala.
+~
+Even functions are objects
+
+<iframe height="400px" frameborder="0" style="width: 100%" src="https://embed.scalafiddle.io/embed?sfid=20Q9653/0"></iframe>
+~
+Functional vs imperative
+<iframe height="400px" frameborder="0" style="width: 100%" src="https://embed.scalafiddle.io/embed?sfid=mvcOonN/0&layout=h85"></iframe>
+
+Note:
+- Of course, this is a favourable example. 
+- If you're familiar with Java 8 Streams you're probably comfortable with this functional style now.
+- It's often more concise. 
+- Especially in Scala (where the collections API is more concise than Java streams)
+~~~~
+Code Kata
+
+Note:
+- That was a quick whirlwind tour of Scala. But it should be enough for you to complete a Code Kata or two.
+- Who has done a code kata before?
+~
+Deliberate practice to hone your Scala skills
+
+Note:
+- Often you do a code kata with a specific focus.
+- e.g. you might do it in your language of choice, but focus on practicing TDD or pair programming.
+- Right now we're focusing on getting familiar with syntax Scala.
+~
+We will due a few Katas today.
+~
+Let's start with FizzBuzz
+
+Note:
+Is everyone familiar with FizzBuzz?
+~
+__go fourth and practice__
+
+- Open the project you checked out in IntelliJ.
+- Go to FizzBuzzSpec and uncomment the tests
+- Implement FizzBuzz!
+</small>
+
+					</textarea>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				history: true,
+				showNotes: true,
+                // slideNumber: true,
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+          { src: 'socket.io/socket.io.js', async: true },
+		      { src: 'plugin/notes-server/client.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
