@@ -37,7 +37,7 @@ class ErrorHandling extends FunSuite with Matchers {
 
 
   test("Successfully get the content as String") {
-    getContentAsString("https://soniarodriguez.github.io/scala-for-java-devs/").get.contains("Fullstack Scala") shouldBe true
+    getContentAsString("https://soniarodriguez.github.io/scala-for-java-devs/").get.contains("Scala for Java Devs") shouldBe true
   }
 
   test("Fail with error message as String") {
